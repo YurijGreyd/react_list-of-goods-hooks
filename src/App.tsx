@@ -41,12 +41,22 @@ export const App: React.FC = () => {
         sortedGoods.reverse();
         break;
 
-      default:
+      case SortType.Reset:
         sortedGoods = [...goodsFromServer];
+        setIsReverse(false);
+        setActiveButton(undefined);
+        setResetVisible(false);
+        break;
+
+      default:
+        break;
     }
 
     setGoods(sortedGoods);
-    setResetVisible(true); // Показуємо reset кнопку після будь-якого сортування
+
+    if (field !== SortType.Reset) {
+      setResetVisible(true);
+    }
   };
 
   return (
