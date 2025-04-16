@@ -8,44 +8,45 @@ import { SortType } from './types/SortType';
 
 export const App: React.FC = () => {
   const isLight = 'is-light';
-  const [activeButton, setActiveButton] = useState<SortType | ''>('');
+  const [activeButton, setActiveButton] = useState<SortType | undefined>(
+    undefined,
+  );
   const [goods, setGoods] = useState<string[]>(goodsFromServer);
   const [resetVisible, setResetVisible] = useState<boolean>(false);
   const [isReverse, setIsReverse] = useState<boolean>(false);
 
   const sortGoods = (field: SortType) => {
     let sortedGoods = [...goods];
+    let nextIsReverse = isReverse;
 
     if (field === SortType.Reverse) {
-      setIsReverse(!isReverse);
+      nextIsReverse = !isReverse;
+      setIsReverse(nextIsReverse);
     }
 
     switch (field) {
       case SortType.Length:
-        if (!isReverse) {
-          sortedGoods.sort((a, b) => a.length - b.length);
-        } else {
-          sortedGoods.sort((a, b) => b.length - a.length);
-        }
-
+        sortedGoods.sort((a, b) =>
+          nextIsReverse ? b.length - a.length : a.length - b.length,
+        );
         break;
+
       case SortType.Alphabetically:
-        if (!isReverse) {
-          sortedGoods.sort((a, b) => a.localeCompare(b));
-        } else {
-          sortedGoods.sort((a, b) => b.localeCompare(a));
-        }
-
+        sortedGoods.sort((a, b) =>
+          nextIsReverse ? b.localeCompare(a) : a.localeCompare(b),
+        );
         break;
+
       case SortType.Reverse:
         sortedGoods.reverse();
-        setResetVisible(!isReverse);
         break;
+
       default:
         sortedGoods = [...goodsFromServer];
     }
 
     setGoods(sortedGoods);
+    setResetVisible(true); // Показуємо reset кнопку після будь-якого сортування
   };
 
   return (

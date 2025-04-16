@@ -4,8 +4,8 @@ import { SortType } from '../../types/SortType';
 
 interface Props {
   isLight: string;
-  activeButton: string;
-  setActiveButton: (value: string) => void;
+  activeButton: SortType | undefined;
+  setActiveButton: (value: SortType | undefined) => void;
   resetVisible: boolean;
   setResetVisible: (value: boolean) => void;
   isReverse: boolean;
@@ -62,7 +62,7 @@ export const Buttons: React.FC<Props> = ({
           onClick={() => {
             sortGoods(SortType.Reset);
             setResetVisible(false);
-            setActiveButton('');
+            setActiveButton(undefined);
             setIsReverse(false);
           }}
         >
